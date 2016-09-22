@@ -1,0 +1,6 @@
+---
+applications:
+- name: predix-avioareo-new
+  memory: 128M
+  buildpack: staticfile_buildpack
+  

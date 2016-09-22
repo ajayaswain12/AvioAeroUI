@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="description" content="">
+<meta name="author" content="">
+
+<title>AvioAero-Homepage</title>
+<!-- Bootstrap Core CSS -->
+<link href="vendor/bootstrap/css/bootstrap.min.css" rel="stylesheet">
+<!-- Theme CSS -->
+<link href="css/clean-blog.min.css" rel="stylesheet">
+<!-- Custom Fonts -->
+<link href="css/AdminLTE.min.css" rel="stylesheet">
+<link href="css/iids.css" rel="stylesheet">
+<link href="vendor/font-awesome/css/font-awesome.min.css"	rel="stylesheet" type="text/css">
+<link href="css/mediaelementplayer.min.css" rel="stylesheet">
+<link rel = "stylesheet" type = "text/css" href = "stylesheets/bloodShed.css">
+<script src="scripts/jquery.js"></script>
+<script src="scripts/bootstrap.min.js"></script>
+<script src="scripts/mediaelement-and-player.min.js"></script>
+<script src="highcharts/js/highcharts.js"></script>
+<script src="highcharts/js/modules/exporting.js"></script>
+  <script>
+	  var map;
+	  function initMap() {
+	  var myLatlng = new google.maps.LatLng(20.296059, 85.824540);
+		var mapOptions = {
+			zoom : 12,
+			center : myLatlng,
+			mapTypeId : google.maps.MapTypeId.ROADMAP
+		};
+		map = new google.maps.Map(document.getElementById('map'), mapOptions);									
+		/*var flightPlanCoordinates = [
+          {lat: 37.772, lng: -122.214},
+          {lat: 21.291, lng: -157.821},
+          {lat: -18.142, lng: 178.431},
+          {lat: -27.467, lng: 153.027}
+        ];
+        var flightPath = new google.maps.Polyline({
+          path: flightPlanCoordinates,
+          geodesic: true,
+          strokeColor: '#FF0000',
+          strokeOpacity: 1.0,
+          strokeWeight: 2
+        });
+
+        flightPath.setMap(map);*/
+	}
+	</script>
+	 <script async defer
+	src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBNh7stc6mj1nSZaqKzAEymFZWBWx5QBck&callback=initMap">
+	</script>
+	<script>
+	$(function () {
+
+	$.getJSON('https://predix-avioaeroflightservice1.run.aws-usw02-pr.ice.predix.io/getFlightParamDetails/1', function (data) {
+	    console.log(data);
+		var flightTimes=[];
+		var flightData=[];
+		$.each(data.flightParametersDtoList,function(key,val){
+				console.log(val.time);
+				flightTimes.push(val.time);
+				if(key=="e07"){
+					flightData.push(val.e07);
+				}
+				
+		});
+		
+		plotChart1(flightTimes);
+	  });
+	});
+	
+function plotChart1(ftime){	
+    $('#chart1').highcharts( {
+             chart: {
+            type: 'spline'
+        },
+        title: {
+            text: 'Snow depth at Vikjafjellet, Norway'
+        },
+        subtitle: {
+            text: 'Irregular time data in Highcharts JS'
+        },
+        xAxis: {
+            categories:ftime
+        },
+        yAxis: {
+            title: {
+                text: 'Snow depth (m)'
+            },
+            min: 0
+        },
+        tooltip: {
+            headerFormat: '<b>{series.name}</b><br>',
+            pointFormat: '{point.x:%e. %b}: {point.y:.2f} m'
+        },
+
+        plotOptions: {
+            spline: {
+                marker: {
+                    enabled: true
+                }
+            }
+        },
+
+        series: [{
+            name: 'Winter 2012-2013',
+            // Define the data points. All series have a dummy year
+            // of 1970/71 in order to be compared on the same x axis. Note
+            // that in JavaScript, months start at 0 for January, 1 for February etc.
+            data: ftime	
+        }]
+    });
+}
+	</script>
+<style>
+     
+      #map {
+        height: 500px;
+		width:100%;
+      }
+	  .highcharts-container{
+	    width:100%
+	  }
+    </style>
+
+</head>
+
+<body>
+
+	<header class="intro-header"
+		style="background-image: url('images/hero-digital-solutions.jpg')">
+		<div class="container">
+		<div class="row">
+			<div class="col-md-6">
+				
+					<div class="site-heading pull-left" style="height:19px">
+						<img src="images/avio.png" style="margin-top: 0px;"></img>
+
+					</div>
+					
+					
+			
+			</div>
+		</div>
+		<div class="row">
+			<div class="col-md-6" style="padding-top: 0px;">
+					<h1><span style="color:#fff">Digital Solutions</span></h1>
+					<p style="color:#fff">The digital industrial era begins</p>
+					<p style="text-align:justify;color:#fff">At Avio Aero, we’re bringing together best-in-class analytics and deep domain expertise to help our customers solve their toughest challenges. That’s why we developed Predix, a configurable and open platform that connects engines, aircraft and operations for unprecedented productivity and predictability.
+					</p>
+			</div>
+		</div>
+
+		</div>
+	</header>
+	<section style="margin-top: -50px;">
+	<div class="container content">
+	<div class="row">
+		<div class="col-sm-12 col-md-12">
+			<div class="module">
+				<div class="module-body">
+					<div class="page-header voice voice-brand">
+						<h3 class="pull-left">Flight Selection</h3>
+				   </div>
+					<div id="exTab2">	
+							<ul class="nav nav-tabs">
+								<li class="active">
+								<a  href="#1" data-toggle="tab">Map Plot</a>
+								</li>
+								<li><a href="#2" data-toggle="tab">Chart 1</a>
+								</li>
+								<li><a href="#3" data-toggle="tab">Chart 2</a>
+								</li>
+								<li><a href="#4" data-toggle="tab">Chart 3</a>
+								</li>
+							</ul>
+								<div class="tab-content ">
+									<div class="tab-pane active" id="1">
+										<div id="map" ></div>
+										
+									</div>
+									<div class="tab-pane" id="2">
+									   <div id="chart1" style="min-width: 80%; height: 400px; margin: 0 auto">
+									   </div>
+									</div>
+									<div class="tab-pane" id="3">
+										
+									</div>
+									<div class="tab-pane" id="4">
+										
+									</div>
+								</div>
+					  </div>
+			</div>
+			</div>
+			</div>
+		</div>	
+		</div>	
+</section>	
+	
+	
+	<footer class="intro-header">
+		<div class="container">
+			<div class="row">
+				<div class="col-lg-12"></div>
+			</div>
+		</div>
+	</footer>
+</body>
